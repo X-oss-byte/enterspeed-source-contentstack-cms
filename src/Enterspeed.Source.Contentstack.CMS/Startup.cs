@@ -1,5 +1,6 @@
 ﻿using Contentstack.Core;
 using Contentstack.Core.Configuration;
+using Enterspeed.Source.Contentstack.CMS.Handlers;
 using Enterspeed.Source.Contentstack.CMS.Services;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +23,12 @@ namespace Enterspeed.Source.Contentstack.CMS
 
             builder.Services.AddSingleton(new ContentstackClient(options));
             builder.Services.AddSingleton<IEnterspeedConfigurationService>(configurationService);
+
+            // Event handlers
+            builder.Services.AddSingleton<IEnterspeedEventHandler, EntryPublishEventHandler>();
+
+            // Services 
+            builder.Services.AddSingleton<IEntityIdentityService, EntityIdentityService>();
         }
     }
 }

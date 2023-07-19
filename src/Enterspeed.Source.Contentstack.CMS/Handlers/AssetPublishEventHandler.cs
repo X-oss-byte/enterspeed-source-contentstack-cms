@@ -21,7 +21,6 @@ namespace Enterspeed.Source.Contentstack.CMS.Handlers
 
         public void Handle(ContentStackResource resource)
         {
-            
         }
     }
 }
