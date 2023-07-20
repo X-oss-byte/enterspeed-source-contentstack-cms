@@ -5,6 +5,6 @@ namespace Enterspeed.Source.Contentstack.CMS.Handlers;
 
 public interface IEnterspeedEventHandler
 {
-    bool CanHandle(ContentStackResource resource);
-    Task Handle(ContentStackResource resource);
+    bool CanHandle(ContentstackResource resource);
+    Task Handle(ContentstackResource resource);
 }

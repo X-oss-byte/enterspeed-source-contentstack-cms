@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using Contentstack.Core.Models;
 using Enterspeed.Source.Contentstack.CMS.Factories;
 using Enterspeed.Source.Contentstack.CMS.Services.FieldValueConverters;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
+using Newtonsoft.Json.Linq;
 
 namespace Enterspeed.Source.Contentstack.CMS.Services;
 
@@ -29,9 +32,35 @@ public class EnterspeedPropertyService : IEnterspeedPropertyService
         var properties = new Dictionary<string, IEnterspeedProperty>();
         foreach (var field in entry.Object)
         {
-                
+            var contentStackField = _contentstackFieldFactory.Create(field);
+            var converter = _fieldValueConverters.FirstOrDefault(x => x.IsConverter(contentStackField));
+            var value = converter?.Convert(contentStackField);
+
+            if (value == null)
+            {
+                continue;
+            }
+            properties.Add(value.Name, value);
         }
 
-        return new Dictionary<string, IEnterspeedProperty>();
+        properties.Add(MetaData, CreateMetaData(entry));
+
+        return properties;
+    }
+
+    private static IEnterspeedProperty CreateMetaData(Entry entry)
+    {
+        var publishDetails = (entry.Object.FirstOrDefault(p => p.Key == "publish_details").Value as JObject);
+
+        var metaData = new Dictionary<string, IEnterspeedProperty>()
+        {
+            ["locale"] = new StringEnterspeedProperty("locale", publishDetails?.GetValue("locale")?.ToString()),
+            ["type"] = new StringEnterspeedProperty("type", entry.GetContentType()),
+            ["environment"] = new StringEnterspeedProperty("environment", publishDetails?.GetValue("environment")?.ToString()),
+            ["createDate"] = new StringEnterspeedProperty("createDate", entry.GetCreateAt().ToString("yyyy-MM-ddTHH:mm:ss")),
+            ["updateDate"] = new StringEnterspeedProperty("updateDate", entry.GetUpdateAt().ToString("yyyy-MM-ddTHH:mm:ss"))
+        };
+
+        return new ObjectEnterspeedProperty(MetaData, metaData);
     }
 }

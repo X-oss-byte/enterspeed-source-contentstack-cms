@@ -14,13 +14,13 @@ internal class AssetPublishEventHandler : IEnterspeedEventHandler
         _contentstackClient = contentstackClient;
     }
 
-    public bool CanHandle(ContentStackResource resource)
+    public bool CanHandle(ContentstackResource resource)
     {
         return resource?.Module == WebhooksConstants.Types.Asset
                && resource?.Event == WebhooksConstants.Events.Publish;
     }
 
-    public async Task Handle(ContentStackResource resource)
+    public async Task Handle(ContentstackResource resource)
     {
     }
 }

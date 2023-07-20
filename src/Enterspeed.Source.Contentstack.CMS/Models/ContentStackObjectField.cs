@@ -1,14 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
 
 namespace Enterspeed.Source.Contentstack.CMS.Models;
 
-public class ContentStackObjectField : ContentstackField
+public class ContentstackObjectField : ContentstackField
 {
-    //public ContentStackObjectField(object field)
-    //{
-
-    //    Name = field;
-    //    Type = typeof(ContentfulResource);
-    //    Value = value;
-    //}
+    public ContentstackObjectField(KeyValuePair<string, object> field)
+    {
+        Name = field.Key;
+        Type = field.Value?.GetType();
+        Value = field.Value;
+    }
 }

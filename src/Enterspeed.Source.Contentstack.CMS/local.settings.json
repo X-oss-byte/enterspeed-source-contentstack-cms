@@ -7,6 +7,7 @@
     "Enterspeed.BaseUrl": "https://api.enterspeed.com",
     "Contentstack.ApiKey": "blte24caeb4d77d69c9",
     "Contentstack.DeliveryToken": "cs084e5741dc752772dbb6b846",
-    "Contentstack.Environment": "enterspeed-demo"
+    "Contentstack.Environment": "enterspeed-demo",
+    "Contentstack.Region": "EU"
   }
 }

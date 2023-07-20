@@ -1,9 +1,10 @@
 ﻿using Contentstack.Core;
 using Contentstack.Core.Configuration;
-using Contentstack.Core.Internals;
 using Enterspeed.Source.Contentstack.CMS;
+using Enterspeed.Source.Contentstack.CMS.Factories;
 using Enterspeed.Source.Contentstack.CMS.Handlers;
 using Enterspeed.Source.Contentstack.CMS.Services;
+using Enterspeed.Source.Contentstack.CMS.Services.FieldValueConverters;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,16 +23,23 @@ public class Startup : FunctionsStartup
             ApiKey = configuration.ContentstackApiKey,
             DeliveryToken = configuration.ContentStackDeliveryToken,
             Environment = configuration.ContentstackEnvironment,
-            Region = ContentstackRegion.EU
+            Region = configuration.ContentStackRegion
         };
 
+        builder.Services.AddSingleton<IEntityIdentityService, EntityIdentityService>();
+        builder.Services.AddSingleton<IEnterspeedPropertyService, EnterspeedPropertyService>();
         builder.Services.AddSingleton(new ContentstackClient(options));
         builder.Services.AddSingleton<IEnterspeedConfigurationService>(configurationService);
+        builder.Services.AddSingleton<IContentstackFieldFactory, ContentstackFieldFactory>();
+
+        // Field value converters
+        builder.Services.AddSingleton<IEnterspeedFieldValueConverter, StringFieldValueConverter>();
+        builder.Services.AddSingleton<IEnterspeedFieldValueConverter, NumberFieldValueConverter>();
+        builder.Services.AddSingleton<IEnterspeedFieldValueConverter, BooleanFieldValueConverter>();
+        builder.Services.AddSingleton<IEnterspeedFieldValueConverter, ObjectFieldValueConverter>();
+        builder.Services.AddSingleton<IEnterspeedFieldValueConverter, ArrayFieldValueConverter>();
 
         // Event handlers
         builder.Services.AddSingleton<IEnterspeedEventHandler, EntryPublishEventHandler>();
-
-        // Services 
-        builder.Services.AddSingleton<IEntityIdentityService, EntityIdentityService>();
     }
 }

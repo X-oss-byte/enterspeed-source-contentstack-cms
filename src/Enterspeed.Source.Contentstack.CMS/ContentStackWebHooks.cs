@@ -31,7 +31,7 @@ public class ContentStackWebHooks
         ILogger log)
     {
         var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-        var requestData = JsonSerializer.Deserialize<ContentStackResource>(requestBody);
+        var requestData = JsonSerializer.Deserialize<ContentstackResource>(requestBody);
 
         var enterspeedEventHandler = _enterspeedEventHandlers.FirstOrDefault(x => x.CanHandle(requestData));
 

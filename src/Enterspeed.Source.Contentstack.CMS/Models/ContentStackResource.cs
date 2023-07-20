@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Enterspeed.Source.Contentstack.CMS.Models;
 
-public class ContentStackResource
+public class ContentstackResource
 
 {
     [JsonPropertyName("module")]
