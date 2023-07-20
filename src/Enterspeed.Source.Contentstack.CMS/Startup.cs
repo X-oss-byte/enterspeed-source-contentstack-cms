@@ -1,34 +1,37 @@
 ﻿using Contentstack.Core;
 using Contentstack.Core.Configuration;
+using Contentstack.Core.Internals;
+using Enterspeed.Source.Contentstack.CMS;
 using Enterspeed.Source.Contentstack.CMS.Handlers;
 using Enterspeed.Source.Contentstack.CMS.Services;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Enterspeed.Source.Contentstack.CMS
+[assembly: FunctionsStartup(typeof(Startup))]
+namespace Enterspeed.Source.Contentstack.CMS;
+
+public class Startup : FunctionsStartup
 {
-    public class Startup : FunctionsStartup
+    public override void Configure(IFunctionsHostBuilder builder)
     {
-        public override void Configure(IFunctionsHostBuilder builder)
+        var configurationService = new EnterspeedConfigurationService();
+
+        var configuration = configurationService.GetConfiguration();
+        var options = new ContentstackOptions()
         {
-            var configurationService = new EnterspeedConfigurationService();
+            ApiKey = configuration.ContentstackApiKey,
+            DeliveryToken = configuration.ContentStackDeliveryToken,
+            Environment = configuration.ContentstackEnvironment,
+            Region = ContentstackRegion.EU
+        };
 
-            var configuration = configurationService.GetConfiguration();
-            var options = new ContentstackOptions()
-            {
-                ApiKey = configuration.ContentstackApiKey,
-                DeliveryToken = configuration.ContentStackDeliveryToken,
-                Environment = configuration.Environment
-            };
+        builder.Services.AddSingleton(new ContentstackClient(options));
+        builder.Services.AddSingleton<IEnterspeedConfigurationService>(configurationService);
 
-            builder.Services.AddSingleton(new ContentstackClient(options));
-            builder.Services.AddSingleton<IEnterspeedConfigurationService>(configurationService);
+        // Event handlers
+        builder.Services.AddSingleton<IEnterspeedEventHandler, EntryPublishEventHandler>();
 
-            // Event handlers
-            builder.Services.AddSingleton<IEnterspeedEventHandler, EntryPublishEventHandler>();
-
-            // Services 
-            builder.Services.AddSingleton<IEntityIdentityService, EntityIdentityService>();
-        }
+        // Services 
+        builder.Services.AddSingleton<IEntityIdentityService, EntityIdentityService>();
     }
 }

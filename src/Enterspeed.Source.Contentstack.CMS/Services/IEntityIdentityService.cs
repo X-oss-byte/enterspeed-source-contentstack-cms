@@ -1,9 +1,8 @@
 ﻿using Contentstack.Core.Models;
 
-namespace Enterspeed.Source.Contentstack.CMS.Services
+namespace Enterspeed.Source.Contentstack.CMS.Services;
+
+public interface IEntityIdentityService
 {
-    public interface IEntityIdentityService
-    {
-        string GetId(Entry entry, string locale);
-    }
+    string GetId(Entry entry, string locale);
 }

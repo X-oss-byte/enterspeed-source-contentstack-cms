@@ -1,13 +1,12 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Enterspeed.Source.Contentstack.CMS.Models
-{
-    public class ContentType
-    {
-        [JsonPropertyName("uid")]
-        public string Uid { get; set; }
+namespace Enterspeed.Source.Contentstack.CMS.Models;
 
-        [JsonPropertyName("title")]
-        public string Title { get; set; }
-    }
+public class ContentType
+{
+    [JsonPropertyName("uid")]
+    public string Uid { get; set; }
+
+    [JsonPropertyName("title")]
+    public string Title { get; set; }
 }

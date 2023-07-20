@@ -1,10 +1,10 @@
-﻿using Enterspeed.Source.Contentstack.CMS.Models;
+﻿using System.Threading.Tasks;
+using Enterspeed.Source.Contentstack.CMS.Models;
 
-namespace Enterspeed.Source.Contentstack.CMS.Handlers
+namespace Enterspeed.Source.Contentstack.CMS.Handlers;
+
+public interface IEnterspeedEventHandler
 {
-    internal interface IEnterspeedEventHandler
-    {
-        bool CanHandle(ContentStackResource resource);
-        void Handle(ContentStackResource resource);
-    }
+    bool CanHandle(ContentStackResource resource);
+    Task Handle(ContentStackResource resource);
 }
