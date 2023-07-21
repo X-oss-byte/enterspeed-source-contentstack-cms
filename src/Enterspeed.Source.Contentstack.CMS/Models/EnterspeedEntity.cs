@@ -17,8 +17,8 @@ public class EnterspeedEntity : IEnterspeedEntity
 
     public string Id { get; }
     public string Type { get; }
-    public string Url { get; }
-    public string[] Redirects { get; }
-    public string ParentId { get; }
+    public string Url => null;
+    public string[] Redirects => null;
+    public string ParentId => null;
     public IDictionary<string, IEnterspeedProperty> Properties { get; }
 }

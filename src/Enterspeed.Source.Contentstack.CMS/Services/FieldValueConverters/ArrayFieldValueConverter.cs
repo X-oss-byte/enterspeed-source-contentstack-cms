@@ -1,4 +1,6 @@
-﻿using Enterspeed.Source.Contentstack.CMS.Models;
+﻿using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using Enterspeed.Source.Contentstack.CMS.Models;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
 using Newtonsoft.Json.Linq;
 
@@ -48,7 +50,9 @@ public class ArrayFieldValueConverter : IEnterspeedFieldValueConverter
         //    }
 
         //    return new ArrayEnterspeedProperty(field.Name, arrayItems.ToArray());
-        //}
-        return new ArrayEnterspeedProperty(field.Name, new IEnterspeedProperty[2]);
+        //}'
+        // TODO: Fix. This is only for testing purposes. 
+        var arrayItems = new List<IEnterspeedProperty> { new StringEnterspeedProperty("test") };
+        return new ArrayEnterspeedProperty(field.Name, arrayItems.ToArray());
     }
 }
