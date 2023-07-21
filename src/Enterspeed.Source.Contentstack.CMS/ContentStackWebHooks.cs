@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using Enterspeed.Source.Contentstack.CMS.Handlers;
 
 namespace Enterspeed.Source.ContentStack.CMS;
@@ -26,9 +25,7 @@ public class ContentStackWebHooks
     }
 
     [FunctionName("ContentStackWebHooks")]
-    public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
-        ILogger log)
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req)
     {
         var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
         var requestData = JsonSerializer.Deserialize<ContentstackResource>(requestBody);
