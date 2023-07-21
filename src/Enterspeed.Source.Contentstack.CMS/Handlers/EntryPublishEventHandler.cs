@@ -31,8 +31,8 @@ internal class EntryPublishEventHandler : IEnterspeedEventHandler
 
     public bool CanHandle(ContentstackResource resource)
     {
-        return resource?.Module == WebhooksConstants.Types.Entry
-               && resource?.Event == WebhooksConstants.Events.Publish;
+        return resource?.Module == WebHookConstants.Types.Entry
+               && resource?.Event == WebHookConstants.Events.Publish;
     }
 
     public async Task Handle(ContentstackResource resource)

@@ -9,7 +9,7 @@ public class EntityIdentityService : IEntityIdentityService
         return GetId(entry.Uid, locale);
     }
 
-    private static string GetId(string id, string locale)
+    public string GetId(string id, string locale)
     {
         return $"{id}-{locale}".ToLower();
     }

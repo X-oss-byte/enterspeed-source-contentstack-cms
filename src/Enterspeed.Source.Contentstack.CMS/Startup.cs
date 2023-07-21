@@ -52,5 +52,6 @@ public class Startup : FunctionsStartup
 
         // Event handlers
         builder.Services.AddSingleton<IEnterspeedEventHandler, EntryPublishEventHandler>();
+        builder.Services.AddSingleton<IEnterspeedEventHandler, EntryDeleteEventHandler>();
     }
 }

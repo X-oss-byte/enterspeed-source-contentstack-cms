@@ -16,8 +16,8 @@ internal class AssetPublishEventHandler : IEnterspeedEventHandler
 
     public bool CanHandle(ContentstackResource resource)
     {
-        return resource?.Module == WebhooksConstants.Types.Asset
-               && resource?.Event == WebhooksConstants.Events.Publish;
+        return resource?.Module == WebHookConstants.Types.Asset
+               && resource?.Event == WebHookConstants.Events.Publish;
     }
 
     public async Task Handle(ContentstackResource resource)
