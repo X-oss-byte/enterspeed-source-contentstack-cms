@@ -2,8 +2,7 @@
   "profiles": {
     "Enterspeed.Source.ContentStack.CMS": {
       "commandName": "Project",
-      "commandLineArgs": "--port 7119",
-      "launchBrowser": false
+      "commandLineArgs": "--port 7119"
     }
   }
 }

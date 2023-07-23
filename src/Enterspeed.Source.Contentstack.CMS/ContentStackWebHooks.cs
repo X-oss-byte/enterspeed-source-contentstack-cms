@@ -1,40 +1,40 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Enterspeed.Source.Contentstack.CMS.Exceptions;
-using Enterspeed.Source.Contentstack.CMS.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.AspNetCore.Http;
 using Enterspeed.Source.Contentstack.CMS.Handlers;
+using Enterspeed.Source.Contentstack.CMS.Models;
+using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
 
 namespace Enterspeed.Source.ContentStack.CMS;
 
-public class ContentStackWebHooks
+public class ContentstackWebHooks
 {
     private readonly IEnumerable<IEnterspeedEventHandler> _enterspeedEventHandlers;
 
-    public ContentStackWebHooks(
-        IEnumerable<IEnterspeedEventHandler> enterspeedEventHandlers
-        )
+    public ContentstackWebHooks(
+        IEnumerable<IEnterspeedEventHandler> enterspeedEventHandlers)
     {
         _enterspeedEventHandlers = enterspeedEventHandlers;
     }
 
-    [FunctionName("ContentStackWebHooks")]
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req)
+    [Function("ContentstackWebHooks")]
+    public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestData req)
     {
         var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
         var requestData = JsonSerializer.Deserialize<ContentstackResource>(requestBody);
 
         var enterspeedEventHandler = _enterspeedEventHandlers.FirstOrDefault(x => x.CanHandle(requestData));
-
         if (enterspeedEventHandler == null)
         {
-            return new BadRequestObjectResult($"no handler found for event '{requestData.Event}'");
+            var response = req.CreateResponse(HttpStatusCode.BadRequest);
+            await response.WriteStringAsync($"no handler found for event '{requestData.Event}'");
+
+            return response;
         }
 
         try
@@ -43,9 +43,12 @@ public class ContentStackWebHooks
         }
         catch (EventHandlerException exception)
         {
-            return new UnprocessableEntityObjectResult(exception.Message);
+            var response = req.CreateResponse(HttpStatusCode.UnprocessableEntity);
+            await response.WriteStringAsync(exception.Message);
+
+            return response;
         }
 
-        return new OkObjectResult("");
+        return req.CreateResponse(HttpStatusCode.OK);
     }
 }
