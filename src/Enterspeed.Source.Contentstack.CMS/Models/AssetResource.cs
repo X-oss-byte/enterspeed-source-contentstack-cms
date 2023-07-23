@@ -2,7 +2,7 @@
 
 namespace Enterspeed.Source.Contentstack.CMS.Models;
 
-public class EntryResource
+public class AssetResource
 {
     [JsonPropertyName("uid")]
     public string Uid { get; set; }
@@ -10,8 +10,11 @@ public class EntryResource
     [JsonPropertyName("title")]
     public string Title { get; set; }
 
-    [JsonPropertyName("locale")]
-    public string Locale { get; set; }
+    [JsonPropertyName("isDIr")]
+    public string IsDir { get; set; }
+
+    [JsonPropertyName("content_type")]
+    public string ContentType { get; set; }
 
     [JsonPropertyName("_version")]
     public int Version { get; set; }

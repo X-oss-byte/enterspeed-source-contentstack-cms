@@ -12,7 +12,14 @@ public class EnterspeedEntity : IEnterspeedEntity
     {
         Id = entityIdentityService.GetId(entry, locale);
         Type = entry.GetContentType();
-        Properties = enterspeedPropertyService.GetProperties(entry, locale);
+        Properties = enterspeedPropertyService.GetProperties(entry);
+    }
+
+    public EnterspeedEntity(Asset asset, string type, IEnterspeedPropertyService enterspeedPropertyService)
+    {
+        Id = asset.Uid;
+        Type = type;
+        Properties = enterspeedPropertyService.GetProperties(asset);
     }
 
     public string Id { get; }

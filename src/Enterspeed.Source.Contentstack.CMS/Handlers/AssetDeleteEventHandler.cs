@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Enterspeed.Source.Contentstack.CMS.Constants;
 using Enterspeed.Source.Contentstack.CMS.Models;
 
 namespace Enterspeed.Source.Contentstack.CMS.Handlers
@@ -8,12 +9,13 @@ namespace Enterspeed.Source.Contentstack.CMS.Handlers
     {
         public bool CanHandle(ContentstackResource resource)
         {
-            throw new NotImplementedException();
+            return (resource.Event.Equals(WebHookConstants.Events.UnPublish) ||
+                   resource.Event.Equals(WebHookConstants.Events.Delete)) &&
+                   resource.Module.Equals(WebHookConstants.Types.Asset);
         }
 
-        public Task Handle(ContentstackResource resource)
+        public async Task Handle(ContentstackResource resource)
         {
-            throw new NotImplementedException();
         }
     }
 }

@@ -6,5 +6,4 @@ public interface IEntityIdentityService
 {
     string GetId(Entry entry, string locale);
     string GetId(string id, string locale);
-
 }

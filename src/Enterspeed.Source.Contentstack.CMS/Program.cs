@@ -39,8 +39,9 @@ public class Program
                     Environment = configuration.ContentstackEnvironment,
                     Region = configuration.ContentStackRegion
                 };
-
+                services.AddSingleton(new ContentstackClient(options));
                 services.AddSingleton(configuration);
+
                 services.AddSingleton<IEnterspeedConfigurationProvider, EnterspeedContentstackConfigurationProvider>();
                 services.AddSingleton<IEnterspeedConfigurationService>(configurationService);
                 services.AddSingleton<IEnterspeedConnection, EnterspeedConnection>();
@@ -48,7 +49,6 @@ public class Program
                 services.AddSingleton<IJsonSerializer, SystemTextJsonSerializer>();
                 services.AddSingleton<IEntityIdentityService, EntityIdentityService>();
                 services.AddSingleton<IEnterspeedPropertyService, EnterspeedPropertyService>();
-                services.AddSingleton(new ContentstackClient(options));
                 services.AddSingleton<IContentstackFieldFactory, ContentstackFieldFactory>();
 
                 // Field value converters
@@ -61,6 +61,8 @@ public class Program
                 // Event handlers
                 services.AddSingleton<IEnterspeedEventHandler, EntryPublishEventHandler>();
                 services.AddSingleton<IEnterspeedEventHandler, EntryDeleteEventHandler>();
+                services.AddSingleton<IEnterspeedEventHandler, AssetPublishEventHandler>();
+                services.AddSingleton<IEnterspeedEventHandler, AssetDeleteEventHandler>();
             })
             .Build();
         await host.RunAsync();

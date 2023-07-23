@@ -6,5 +6,6 @@ namespace Enterspeed.Source.Contentstack.CMS.Services;
 
 public interface IEnterspeedPropertyService
 {
-    IDictionary<string, IEnterspeedProperty> GetProperties(Entry entry, string locale);
+    IDictionary<string, IEnterspeedProperty> GetProperties(Entry entry);
+    IDictionary<string, IEnterspeedProperty> GetProperties(Asset asset);
 }

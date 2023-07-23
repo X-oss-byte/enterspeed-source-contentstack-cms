@@ -2,7 +2,7 @@
 
 namespace Enterspeed.Source.Contentstack.CMS.Models;
 
-internal class EntryDataResource
+public class EntryDataResource
 {
     [JsonPropertyName("entry")]
     public EntryResource EntryResource { get; set; }

@@ -10,7 +10,7 @@ using Enterspeed.Source.Sdk.Api.Services;
 
 namespace Enterspeed.Source.Contentstack.CMS.Handlers;
 
-internal class EntryPublishEventHandler : IEnterspeedEventHandler
+public class EntryPublishEventHandler : IEnterspeedEventHandler
 {
     private readonly ContentstackClient _contentstackClient;
     private readonly IEntityIdentityService _entityIdentityService;
