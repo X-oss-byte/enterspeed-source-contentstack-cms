@@ -37,11 +37,11 @@ public class EntryPublishEventHandler : IEnterspeedEventHandler
 
     public async Task Handle(ContentstackResource resource)
     {
-        var entry = JsonSerializer.Deserialize<EntryDataResource>(resource.Data.ToString() ?? string.Empty);
-        if (entry != null)
+        var data = JsonSerializer.Deserialize<EntryDataResource>(resource.Data.ToString() ?? string.Empty);
+        if (data != null)
         {
-            var entryData = await _contentstackClient.ContentType(entry.ContentType?.Uid).Entry(entry.EntryResource.Uid).Fetch<Entry>();
-            var entity = new EnterspeedEntity(entryData, entry.Locale, _entityIdentityService, _enterspeedPropertyService);
+            var entry = await _contentstackClient.ContentType(data.ContentType?.Uid).Entry(data.EntryResource.Uid).Fetch<Entry>();
+            var entity = new EnterspeedEntity(entry, data.Locale, _entityIdentityService, _enterspeedPropertyService);
 
             var saveResponse = _enterspeedIngestService.Save(entity);
             if (!saveResponse.Success)

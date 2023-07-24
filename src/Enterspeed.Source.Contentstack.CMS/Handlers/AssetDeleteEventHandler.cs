@@ -1,21 +1,43 @@
-﻿using System;
+﻿using System.Net;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Enterspeed.Source.Contentstack.CMS.Constants;
+using Enterspeed.Source.Contentstack.CMS.Exceptions;
 using Enterspeed.Source.Contentstack.CMS.Models;
+using Enterspeed.Source.Sdk.Api.Services;
 
-namespace Enterspeed.Source.Contentstack.CMS.Handlers
+namespace Enterspeed.Source.Contentstack.CMS.Handlers;
+
+public class AssetDeleteEventHandler : IEnterspeedEventHandler
 {
-    public class AssetDeleteEventHandler : IEnterspeedEventHandler
+    private readonly IEnterspeedIngestService _enterspeedIngestService;
+
+    public AssetDeleteEventHandler(IEnterspeedIngestService enterspeedIngestService)
     {
-        public bool CanHandle(ContentstackResource resource)
+        _enterspeedIngestService = enterspeedIngestService;
+    }
+
+    public bool CanHandle(ContentstackResource resource)
+    {
+        return (resource.Event.Equals(WebHookConstants.Events.UnPublish) ||
+                resource.Event.Equals(WebHookConstants.Events.Delete)) &&
+               resource.Module.Equals(WebHookConstants.Types.Asset);
+    }
+
+    public Task Handle(ContentstackResource resource)
+    {
+        var data = JsonSerializer.Deserialize<AssetDataResource>(resource.Data.ToString() ?? string.Empty);
+        if (data != null)
         {
-            return (resource.Event.Equals(WebHookConstants.Events.UnPublish) ||
-                   resource.Event.Equals(WebHookConstants.Events.Delete)) &&
-                   resource.Module.Equals(WebHookConstants.Types.Asset);
+            var id = data.EntryResource.Uid;
+
+            var deleteResponse = _enterspeedIngestService.Delete(id);
+            if (!deleteResponse.Success && deleteResponse.Status != HttpStatusCode.NotFound)
+            {
+                throw new EventHandlerException($"Failed deleting entity ({id}). Message: {deleteResponse.Message}");
+            }
         }
 
-        public async Task Handle(ContentstackResource resource)
-        {
-        }
+        return Task.CompletedTask;
     }
 }

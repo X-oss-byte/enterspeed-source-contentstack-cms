@@ -31,11 +31,11 @@ public class AssetPublishEventHandler : IEnterspeedEventHandler
 
     public async Task Handle(ContentstackResource resource)
     {
-        var asset = JsonSerializer.Deserialize<AssetDataResource>(resource.Data.ToString() ?? string.Empty);
-        if (asset != null)
+        var data = JsonSerializer.Deserialize<AssetDataResource>(resource.Data.ToString() ?? string.Empty);
+        if (data != null)
         {
-            var assetData = await _contentstackClient.Asset(asset.EntryResource.Uid).Fetch();
-            var entity = new EnterspeedEntity(assetData, asset.EntryResource.ContentType, _enterspeedPropertyService);
+            var asset = await _contentstackClient.Asset(data.EntryResource.Uid).Fetch();
+            var entity = new EnterspeedEntity(asset, data.EntryResource.ContentType, _enterspeedPropertyService);
 
             var saveResponse = _enterspeedIngestService.Save(entity);
             if (!saveResponse.Success)

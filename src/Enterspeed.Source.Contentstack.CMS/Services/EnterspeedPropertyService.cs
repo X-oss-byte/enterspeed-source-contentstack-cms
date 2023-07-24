@@ -69,7 +69,7 @@ public class EnterspeedPropertyService : IEnterspeedPropertyService
         var properties = new Dictionary<string, IEnterspeedProperty>
             {
                 { Title, new StringEnterspeedProperty(Title, asset.FileName) },
-                { Description, new StringEnterspeedProperty(Description, asset.Description) },
+                { Description, new StringEnterspeedProperty(Description, asset.Description ?? string.Empty) },
                 { File, CreateFileData(asset) },
                 { MetaData, CreateMetaData(asset) }
             };

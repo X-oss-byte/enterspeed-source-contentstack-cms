@@ -7,32 +7,34 @@ using Enterspeed.Source.Contentstack.CMS.Models;
 using Enterspeed.Source.Contentstack.CMS.Services;
 using Enterspeed.Source.Sdk.Api.Services;
 
-namespace Enterspeed.Source.Contentstack.CMS.Handlers
+namespace Enterspeed.Source.Contentstack.CMS.Handlers;
+
+public class EntryDeleteEventHandler : IEnterspeedEventHandler
 {
-    public class EntryDeleteEventHandler : IEnterspeedEventHandler
+    private readonly IEnterspeedIngestService _enterspeedIngestService;
+    private readonly IEntityIdentityService _entityIdentityService;
+
+    public EntryDeleteEventHandler(
+        IEnterspeedIngestService enterspeedIngestService,
+        IEntityIdentityService entityIdentityService
+    )
     {
-        private readonly IEnterspeedIngestService _enterspeedIngestService;
-        private readonly IEntityIdentityService _entityIdentityService;
+        _enterspeedIngestService = enterspeedIngestService;
+        _entityIdentityService = entityIdentityService;
+    }
 
-        public EntryDeleteEventHandler(
-            IEnterspeedIngestService enterspeedIngestService,
-            IEntityIdentityService entityIdentityService
-            )
-        {
-            _enterspeedIngestService = enterspeedIngestService;
-            _entityIdentityService = entityIdentityService;
-        }
+    public bool CanHandle(ContentstackResource resource)
+    {
+        return (resource.Event.Equals(WebHookConstants.Events.UnPublish) ||
+                resource.Event.Equals(WebHookConstants.Events.Delete)) &&
+               resource.Module.Equals(WebHookConstants.Types.Entry);
+    }
 
-        public bool CanHandle(ContentstackResource resource)
+    public Task Handle(ContentstackResource resource)
+    {
+        var data = JsonSerializer.Deserialize<EntryDataResource>(resource.Data.ToString() ?? string.Empty);
+        if (data != null)
         {
-            return (resource.Event.Equals(WebHookConstants.Events.UnPublish) ||
-                   resource.Event.Equals(WebHookConstants.Events.Delete)) &&
-                   resource.Module.Equals(WebHookConstants.Types.Entry);
-        }
-
-        public Task Handle(ContentstackResource resource)
-        {
-            var data = JsonSerializer.Deserialize<EntryDataResource>(resource.Data.ToString() ?? string.Empty);
             var id = _entityIdentityService.GetId(data.EntryResource.Uid, data.Locale);
 
             var deleteResponse = _enterspeedIngestService.Delete(id);
@@ -40,8 +42,8 @@ namespace Enterspeed.Source.Contentstack.CMS.Handlers
             {
                 throw new EventHandlerException($"Failed deleting entity ({id}). Message: {deleteResponse.Message}");
             }
-
-            return Task.CompletedTask;
         }
+
+        return Task.CompletedTask;
     }
 }
