@@ -16,12 +16,3 @@ To test the function locally you must do the following:
    1) Setup a webhook in Contentstack using the ngrok url 
    ![Enterspeed Umbraco configuration](./assets/images/Contentstack-webhook.png)
 5) Publish an entry or asset from Contentstack to push it to Enterspeed
-
-## Seeding
-
-To seed all entries and assets from a space in Contentstack do a POST request like shown here:
-
-```http
-   POST http://localhost:7009/api/v1
-   X-Contentstack-Topic: ContentManagement.Seed
-```

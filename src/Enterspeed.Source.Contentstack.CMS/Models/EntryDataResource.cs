@@ -22,3 +22,4 @@ public class EntryDataResource
     [JsonPropertyName("locale")]
     public string Locale { get; set; }
 }
+    

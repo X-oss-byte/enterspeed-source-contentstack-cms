@@ -7,4 +7,4 @@ See [documentation](./documentation/README.md) for more info about how to test t
 
 ## Status
 
-Note the project is still just an POC and do not support all events and data types in ContContentstackentful.
+Note the project is still just an POC and do not support all events and data types in Contentstack

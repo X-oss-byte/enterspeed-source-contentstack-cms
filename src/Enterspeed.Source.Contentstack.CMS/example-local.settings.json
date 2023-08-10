@@ -1,0 +1,14 @@
+{
+  {
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    "Enterspeed.ApiKey": "",
+    "Enterspeed.BaseUrl": "https://api.enterspeed.com",
+    "Contentstack.ApiKey": "", // Can be found under settings/stack -> API Credentials
+    "Contentstack.DeliveryToken": "",  // Can be found under settings/tokens -> Delivery Tokens
+    "Contentstack.Environment": "", // The environment for the stack
+    "Contentstack.Region": "" // Region your org is created in. 
+  }
+}
